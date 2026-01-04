@@ -12,7 +12,7 @@
            prism:ViewModelLocator.AutoWireViewModel="True"
            mc:Ignorable="d" WindowStartupLocation="CenterScreen"
            hc:Dialog.Token="{x:Static const:DialogTokens.MainWindow}"
-           Title="{x:Static const:Titles.Main}" Height="400" Width="360" Icon="/Assets/Images/祖安.ico" StateChanged="Window_StateChanged" ResizeMode="CanMinimize">
+           Title="{x:Static const:Titles.Main}" Height="430" Width="360" Icon="/Assets/Images/祖安.ico" StateChanged="Window_StateChanged" ResizeMode="CanMinimize">
   <Window.Resources>
     <Style x:Key="NotifyBtn"
            TargetType="Button" BasedOn="{StaticResource ButtonDefault}">
@@ -29,22 +29,12 @@
         <ColumnDefinition/>
         <ColumnDefinition Width="auto"/>
       </Grid.ColumnDefinitions>
-      <StackPanel 
+      <StackPanel
       VerticalAlignment="Stretch" Orientation="Horizontal" Margin="5,0,0,0">
         <Button  Content="{Binding Version}" Foreground="{Binding NeedUpdate,Converter={StaticResource Bool2Brush}}" BorderThickness="0" VerticalAlignment="Center" Command="{Binding UpdateCommand}"/>
-        <Button 
+        <Button
         BorderThickness="0" ToolTip="GitHub" Command="{Binding VisitGitHubCommand}" Margin="10,0,0,0">
           <Image Source="/Assets/Images/github.png"/>
-        </Button>
-        <Button BorderThickness="0" ToolTip="QQ群">
-          <Image Source="/Assets/Images/QQ.png"/>
-          <hc:Poptip.Instance>
-            <hc:Poptip PlacementType="Bottom">
-              <hc:Poptip.Content>
-                <Image Source="/Assets/Images/祖安助手使用交流群群聊二维码.png"/>
-              </hc:Poptip.Content>
-            </hc:Poptip>
-          </hc:Poptip.Instance>
         </Button>
       </StackPanel>
       <Button ToolTip="设置"
@@ -97,6 +87,7 @@
           <RowDefinition/>
           <RowDefinition/>
           <RowDefinition/>
+          <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
           <ColumnDefinition/>
@@ -121,14 +112,17 @@
         <TextBlock Grid.Column="0" Grid.Row="5" Text="F6" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <TextBlock Grid.Column="1" Grid.Row="5" Text="词库5" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-        <TextBlock Grid.Column="0" Grid.Row="6" Text="F11" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <CheckBox x:Name="checkBox_isAll" Grid.Column="1" Grid.Row="6" Content="所有人" IsChecked="{Binding IsAll}" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Column="0" Grid.Row="6" Text="F9" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <CheckBox x:Name="checkBox_isLocked" Grid.Column="1" Grid.Row="6" Content="锁定" IsChecked="{Binding IsLocked}" HorizontalAlignment="Center" ToolTip="锁定后F2-F6不响应,防止误触"/>
 
-        <TextBlock Grid.Column="0" Grid.Row="7" Text="F12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <CheckBox x:Name="checkBox_isPerword" Grid.Column="1" Grid.Row="7" Content="逐字发送" IsChecked="{Binding IsPerWord}" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Column="0" Grid.Row="7" Text="F11" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <CheckBox x:Name="checkBox_isAll" Grid.Column="1" Grid.Row="7" Content="所有人" IsChecked="{Binding IsAll}" HorizontalAlignment="Center"/>
 
-        <TextBlock Grid.Column="0" Grid.Row="8" Text="拼音混淆" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <CheckBox x:Name="checkBox_obfuscation" Grid.Column="1" Grid.Row="8" Content="启用" IsChecked="{Binding EnableObfuscation}" HorizontalAlignment="Center" ToolTip="将敏感字转换为拼音,绕过屏蔽"/>
+        <TextBlock Grid.Column="0" Grid.Row="8" Text="F12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <CheckBox x:Name="checkBox_isPerword" Grid.Column="1" Grid.Row="8" Content="逐字发送" IsChecked="{Binding IsPerWord}" HorizontalAlignment="Center"/>
+
+        <TextBlock Grid.Column="0" Grid.Row="9" Text="拼音混淆" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <CheckBox x:Name="checkBox_obfuscation" Grid.Column="1" Grid.Row="9" Content="启用" IsChecked="{Binding EnableObfuscation}" HorizontalAlignment="Center" ToolTip="将敏感字转换为拼音,绕过屏蔽"/>
       </Grid>
     </Border>
 

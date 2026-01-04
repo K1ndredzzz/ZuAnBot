@@ -100,6 +100,16 @@ namespace ZuAnBot_Wpf.ViewModels
             set { SetProperty(ref _EnableObfuscation, value); }
         }
 
+        private bool _IsLocked = false;
+        /// <summary>
+        /// 是否锁定（防误触）
+        /// </summary>
+        public bool IsLocked
+        {
+            get { return _IsLocked; }
+            set { SetProperty(ref _IsLocked, value); }
+        }
+
         #endregion 绑定属性
 
         public MainWindowViewModel(IDialogService dialogService)
@@ -224,7 +234,7 @@ namespace ZuAnBot_Wpf.ViewModels
         {
             try
             {
-                System.Diagnostics.Process.Start("https://github.com/liuke-wuhan/ZuAnBot");
+                System.Diagnostics.Process.Start("https://github.com/K1ndredzzz/ZuAnBot");
             }
             catch (Exception e)
             {
@@ -336,6 +346,7 @@ namespace ZuAnBot_Wpf.ViewModels
             hook.HookedKeys.Add(Keys.F4);  // 词库3
             hook.HookedKeys.Add(Keys.F5);  // 词库4
             hook.HookedKeys.Add(Keys.F6);  // 词库5
+            hook.HookedKeys.Add(Keys.F9);  // 切换锁定状态
             hook.HookedKeys.Add(Keys.F11); // 切换全员发送
             hook.HookedKeys.Add(Keys.F12); // 切换逐字发送
             hook.hook();
@@ -350,6 +361,32 @@ namespace ZuAnBot_Wpf.ViewModels
         {
             try
             {
+                // F9: 切换锁定状态
+                if (e.KeyCode == Keys.F9)
+                {
+                    IsLocked = !IsLocked;
+                    return;
+                }
+
+                // F11/F12: 这些快捷键不受锁定影响
+                if (e.KeyCode == Keys.F11)
+                {
+                    IsAll = !IsAll;
+                    return;
+                }
+                else if (e.KeyCode == Keys.F12)
+                {
+                    IsPerWord = !IsPerWord;
+                    return;
+                }
+
+                // 如果已锁定,F2-F6 不响应
+                if (IsLocked)
+                {
+                    return;
+                }
+
+                // F2-F6: 词库发送
                 string word = "";
                 if (e.KeyCode == Keys.F2)
                     word += Library.GetLoacalWord("词库1");
@@ -361,16 +398,6 @@ namespace ZuAnBot_Wpf.ViewModels
                     word += Library.GetLoacalWord("词库4");
                 else if (e.KeyCode == Keys.F6)
                     word += Library.GetLoacalWord("词库5");
-                else if (e.KeyCode == Keys.F11)
-                {
-                    IsAll = !IsAll;
-                    return;
-                }
-                else if (e.KeyCode == Keys.F12)
-                {
-                    IsPerWord = !IsPerWord;
-                    return;
-                }
                 else
                 {
                     return;

@@ -47,9 +47,6 @@ namespace ZuAnBot_Wpf.Helper
                         ? pinyinArray[0].ToLower()
                         : c.ToString();
 
-                    // DEBUG: 添加日志
-                    System.Diagnostics.Debug.WriteLine($"字符: {c}, 拼音: {pinyin}, 是否敏感: {SensitivePinyin.Contains(pinyin)}");
-
                     if (aggressiveMode)
                     {
                         // 激进模式：所有汉字转拼音

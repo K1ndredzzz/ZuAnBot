@@ -1,6 +1,6 @@
-# 祖安助手重构总结
+# 祖安助手功能总结
 
-## 本次重构完成的所有功能
+## 核心功能
 
 ### 1. 智能拼音混淆系统 ⭐
 
@@ -25,14 +25,14 @@
 - 其他: pi, gu, tui, fei, la, ji, gou, zhu, lv, ni, bi, wo, ta
 
 #### 发送模式
-- **空格分词发送**: 拼音之间自动添加空格,配合"逐字发送"按词发送
+- **空格分词发送**: 所有字符之间自动添加空格,完美配合"逐字发送"模式
 - **示例**: "你好妈" + 拼音混淆 + 逐字发送
   1. 识别拼音: "你"=ni, "好"=hao, "妈"=ma
   2. 混淆结果: "ni hao ma"
   3. 分词发送: 3行(ni, hao, ma)
 
 #### UI集成
-- 主窗口新增"拼音混淆"开关(第9行)
+- 主窗口新增"拼音混淆"开关(第10行)
 - 托盘菜单同步添加混淆开关
 - 实时应用,无需重启
 
@@ -51,13 +51,16 @@
 - **自动升级**: 程序启动时自动迁移旧数据
 
 #### 快捷键映射
-| 按键 | 词库 |
+| 按键 | 功能 |
 |------|------|
 | F2   | 词库1 |
 | F3   | 词库2 |
 | F4   | 词库3 |
 | F5   | 词库4 |
 | F6   | 词库5 |
+| F9   | 锁定/解锁 (防误触) |
+| F11  | 切换所有人模式 |
+| F12  | 切换逐字发送模式 |
 
 #### 自动升级逻辑
 新增 `UpgradeOldLibrary()` 方法,自动完成:
@@ -77,7 +80,21 @@
 
 ---
 
-### 3. 批量导入功能 📥
+### 3. 防误触锁定功能 🔒
+
+#### 功能特性
+- **F9快捷键**: 快速切换锁定状态
+- **智能锁定**: 锁定后F2-F6词库发送按键不响应,防止与朋友家人聊天时误触
+- **选择性保护**: F11/F12功能开关不受锁定影响,随时可调整设置
+- **可视化状态**: 主界面和托盘菜单均显示锁定状态复选框
+
+#### UI集成
+- 主窗口第7行显示F9锁定开关
+- 实时双向绑定,点击复选框或按F9均可切换
+
+---
+
+### 4. 批量导入功能 📥
 
 #### 功能特性
 - 从 .txt 文件导入词条
@@ -99,7 +116,7 @@
 
 ---
 
-### 4. 多行编辑器 ✏️
+### 5. 多行编辑器 ✏️
 
 #### 新增文件
 - `Views/BatchEdit.xaml` - UI界面
@@ -132,21 +149,20 @@
 
 ## 文件清单
 
-### 新增文件(4个)
-1. `ZuAnBot_Wpf/Helper/TextObfuscator.cs`
-2. `ZuAnBot_Wpf/Views/BatchEdit.xaml`
-3. `ZuAnBot_Wpf/Views/BatchEdit.xaml.cs`
-4. `ZuAnBot_Wpf/ViewModels/BatchEditViewModel.cs`
+### 新增文件(5个)
+1. `ZuAnBot_Wpf/Helper/TextObfuscator.cs` - 拼音混淆核心类
+2. `ZuAnBot_Wpf/Views/BatchEdit.xaml` - 多行编辑界面
+3. `ZuAnBot_Wpf/Views/BatchEdit.xaml.cs` - 多行编辑代码后置
+4. `ZuAnBot_Wpf/ViewModels/BatchEditViewModel.cs` - 多行编辑ViewModel
 
-### 修改文件(8个)
-1. `ZuAnBot_Wpf/ViewModels/MainWindowViewModel.cs` - 添加拼音混淆、5词库、自动升级
+### 修改文件(主要)
+1. `ZuAnBot_Wpf/ViewModels/MainWindowViewModel.cs` - 添加拼音混淆、5词库、自动升级、防误触锁
 2. `ZuAnBot_Wpf/ViewModels/WordLibrary.cs` - 添加批量导入、多行编辑、空检查修复
-3. `ZuAnBot_Wpf/Views/MainWindow.xaml` - UI扩展到9行显示5个词库
+3. `ZuAnBot_Wpf/Views/MainWindow.xaml` - UI扩展到10行(添加F9锁定行)
 4. `ZuAnBot_Wpf/Views/WordsLibrarySet.xaml` - 添加工具栏按钮
 5. `ZuAnBot_Wpf/App.xaml.cs` - 注册BatchEdit对话框
 6. `ZuAnBot_Wpf/Constants/Params.cs` - 添加Category参数
-7. `ZuAnBot_Wpf/Helper/TextObfuscator.cs` - 拼音混淆核心逻辑
-8. `ZuAnBot_Wpf/Assets/wordsLibrary.json` - 5个词库结构
+7. `ZuAnBot_Wpf/Assets/wordsLibrary.json` - 5个词库结构
 
 ### 新增 NuGet 包
 - `hyjiacan.pinyin4net 4.1.1` - 汉字转拼音库
@@ -155,11 +171,29 @@
 
 ## 使用说明
 
+### 快捷键总览
+| 按键 | 功能 | 说明 |
+|------|------|------|
+| F2 | 词库1 | 随机发送词库1中的词条 |
+| F3 | 词库2 | 随机发送词库2中的词条 |
+| F4 | 词库3 | 随机发送词库3中的词条 |
+| F5 | 词库4 | 随机发送词库4中的词条 |
+| F6 | 词库5 | 随机发送词库5中的词条 |
+| F9 | 锁定/解锁 | 防误触锁,锁定后F2-F6不响应 |
+| F11 | 所有人模式 | 切换是否发送给所有人 |
+| F12 | 逐字发送 | 切换是否逐字发送(配合拼音混淆使用) |
+
 ### 词库扩展(5个词库)
 1. 支持5个独立词库,快捷键F2-F6
 2. 词库命名"词库1-5"
 3. 设置界面分别管理
 4. 按F2-F6随机选择对应词库的词条发送
+
+### 防误触锁定
+1. 按F9快速切换锁定状态
+2. 锁定后F2-F6词库按键不响应
+3. 与朋友家人聊天时开启,防止意外发送
+4. F11/F12不受锁定影响,可随时调整设置
 
 ### 拼音混淆功能
 1. 主界面勾选"拼音混淆 - 启用"
@@ -206,9 +240,17 @@
 
 1. ✅ 空词库异常: 使用`FirstOrDefault`并添加友好提示
 2. ✅ 旧词库命名: 自动升级为"词库1-5"
-3. ✅ 拼音覆盖不全: 从"字典"升级为"发音识别"
-4. ✅ 词库数量不足: 从2个扩展到5个
+3. ✅ 拼音API使用错误: 修复`GetPinyin`返回数组而非字符串的bug
+4. ✅ 拼音空格分隔问题: 修复只在拼音前添加空格,现在所有字符都正确分隔
+5. ✅ 词库数量不足: 从2个扩展到5个
 
 ---
 
-**🎉 重构完成!请关闭旧程序并重新运行以体验新功能!**
+## 项目链接
+
+- **GitHub仓库**: [https://github.com/K1ndredzzz/ZuAnBot](https://github.com/K1ndredzzz/ZuAnBot)
+- **问题反馈**: 请在GitHub Issues中提交
+
+---
+
+**🎉 功能完整!享受智能聊天体验!**
