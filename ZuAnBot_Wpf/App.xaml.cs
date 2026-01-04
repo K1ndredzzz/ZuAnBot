@@ -81,6 +81,7 @@ namespace ZuAnBot_Wpf
         {
             containerRegistry.RegisterDialog<WordsLibrarySet, WordsLibrarySetViewModel>();
             containerRegistry.RegisterDialog<WordEdit, WordEditViewModel>();
+            containerRegistry.RegisterDialog<BatchEdit, BatchEditViewModel>();
         }
 
         #region 异常处理

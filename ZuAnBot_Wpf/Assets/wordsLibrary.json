@@ -1,7 +1,7 @@
 {
   "Categories": [
     {
-      "CategoryName": "默认词库",
+      "CategoryName": "词库1",
       "Words": [
         {
           "Content": "如果思考是生存的证明，我真难判断你是不是一具尸体"
@@ -702,7 +702,19 @@
       ]
     },
     {
-      "CategoryName": "自定义词库",
+      "CategoryName": "词库2",
+      "Words": []
+    },
+    {
+      "CategoryName": "词库3",
+      "Words": []
+    },
+    {
+      "CategoryName": "词库4",
+      "Words": []
+    },
+    {
+      "CategoryName": "词库5",
       "Words": []
     }
   ]

@@ -12,7 +12,7 @@
            prism:ViewModelLocator.AutoWireViewModel="True"
            mc:Ignorable="d" WindowStartupLocation="CenterScreen"
            hc:Dialog.Token="{x:Static const:DialogTokens.MainWindow}"
-           Title="{x:Static const:Titles.Main}" Height="300" Width="360" Icon="/Assets/Images/祖安.ico" StateChanged="Window_StateChanged" ResizeMode="CanMinimize">
+           Title="{x:Static const:Titles.Main}" Height="400" Width="360" Icon="/Assets/Images/祖安.ico" StateChanged="Window_StateChanged" ResizeMode="CanMinimize">
   <Window.Resources>
     <Style x:Key="NotifyBtn"
            TargetType="Button" BasedOn="{StaticResource ButtonDefault}">
@@ -73,6 +73,10 @@
               <TextBlock Text="逐字发送" HorizontalAlignment="Left" VerticalAlignment="Center"/>
               <CheckBox x:Name="checkBox_isPerword_notifyIcon" HorizontalAlignment="Right" VerticalAlignment="Center"/>
             </Grid>
+            <Grid Margin="12,5,0,0">
+              <TextBlock Text="拼音混淆" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+              <CheckBox x:Name="checkBox_obfuscation_notifyIcon" IsChecked="{Binding EnableObfuscation}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            </Grid>
             <hc:Divider VerticalAlignment="Center" Margin="10,10,0,10" LineStrokeDashArray="2,2" LineStroke="#FFA5A5A5"/>
             <Button Content="显示主界面" Click="Button_Click" Style="{StaticResource NotifyBtn}"/>
             <Button Content="退出" Click="Button_Quit_Click" Style="{StaticResource NotifyBtn}"/>
@@ -89,7 +93,10 @@
           <RowDefinition/>
           <RowDefinition/>
           <RowDefinition/>
-          <!--<RowDefinition/>-->
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
           <ColumnDefinition/>
@@ -98,17 +105,30 @@
 
         <TextBlock Text="按键" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontStyle="Italic"/>
         <TextBlock Grid.Column="1" Text="功能" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontStyle="Italic"/>
+
         <TextBlock Grid.Column="0" Grid.Row="1" Text="F2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="1" Grid.Row="1" Text="词库1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
         <TextBlock Grid.Column="0" Grid.Row="2" Text="F3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="1" Grid.Row="2" Text="词库2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-        <TextBlock Grid.Column="1" Grid.Row="1" Text="默认词库" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <TextBlock Grid.Column="1" Grid.Row="2" Text="自定义词库" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="0" Grid.Row="3" Text="F4" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="1" Grid.Row="3" Text="词库3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-        <TextBlock Grid.Column="0" Grid.Row="3" Text="F11" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <CheckBox x:Name="checkBox_isAll" Grid.Column="1" Grid.Row="3" Content="所有人" IsChecked="{Binding IsAll}" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Column="0" Grid.Row="4" Text="F5" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="1" Grid.Row="4" Text="词库4" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-        <TextBlock Grid.Column="0" Grid.Row="4" Text="F12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <CheckBox x:Name="checkBox_isPerword" Grid.Column="1" Grid.Row="4" Content="逐字发送" IsChecked="{Binding IsPerWord}" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Column="0" Grid.Row="5" Text="F6" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="1" Grid.Row="5" Text="词库5" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+        <TextBlock Grid.Column="0" Grid.Row="6" Text="F11" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <CheckBox x:Name="checkBox_isAll" Grid.Column="1" Grid.Row="6" Content="所有人" IsChecked="{Binding IsAll}" HorizontalAlignment="Center"/>
+
+        <TextBlock Grid.Column="0" Grid.Row="7" Text="F12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <CheckBox x:Name="checkBox_isPerword" Grid.Column="1" Grid.Row="7" Content="逐字发送" IsChecked="{Binding IsPerWord}" HorizontalAlignment="Center"/>
+
+        <TextBlock Grid.Column="0" Grid.Row="8" Text="拼音混淆" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <CheckBox x:Name="checkBox_obfuscation" Grid.Column="1" Grid.Row="8" Content="启用" IsChecked="{Binding EnableObfuscation}" HorizontalAlignment="Center" ToolTip="将敏感字转换为拼音,绕过屏蔽"/>
       </Grid>
     </Border>
 

@@ -80,6 +80,15 @@ namespace ZuAnBot_Wpf.ViewModels
         {
         }
 
+        /// <summary>
+        /// 添加词条
+        /// </summary>
+        public void AddWord(string content)
+        {
+            var word = new Word { Content = content, Category = this };
+            Words.Add(word);
+        }
+
         #region 命令
 
         public void RefreshSelectedWord()
@@ -318,7 +327,125 @@ namespace ZuAnBot_Wpf.ViewModels
             }
             PasteEnabled = true;
         }
-        #endregion 
+        #endregion
+
+        #region BatchEditCommand
+        private bool _BatchEditEnabled = true;
+        [JsonIgnore]
+        public bool BatchEditEnabled
+        {
+            get { return _BatchEditEnabled; }
+            set { SetProperty(ref _BatchEditEnabled, value); }
+        }
+        private DelegateCommand _BatchEditCommand;
+        [JsonIgnore]
+        public DelegateCommand BatchEditCommand => _BatchEditCommand ?? (_BatchEditCommand = new DelegateCommand(ExecuteBatchEditCommand).ObservesCanExecute(() => BatchEditEnabled));
+        void ExecuteBatchEditCommand()
+        {
+            try
+            {
+                BatchEditEnabled = false;
+
+                var dialogService = ContainerLocator.Container.Resolve<IDialogService>();
+                var parameters = new DialogParameters();
+                parameters.Add(Params.Category, this);
+
+                dialogService.ShowDialog(nameof(BatchEdit), parameters, r =>
+                {
+                    // 操作已在 BatchEditViewModel 中完成
+                });
+            }
+            catch (Exception e)
+            {
+                e.Show();
+            }
+            BatchEditEnabled = true;
+        }
+        #endregion
+
+        #region BatchImportCommand
+        private bool _BatchImportEnabled = true;
+        [JsonIgnore]
+        public bool BatchImportEnabled
+        {
+            get { return _BatchImportEnabled; }
+            set { SetProperty(ref _BatchImportEnabled, value); }
+        }
+        private DelegateCommand _BatchImportCommand;
+        [JsonIgnore]
+        public DelegateCommand BatchImportCommand => _BatchImportCommand ?? (_BatchImportCommand = new DelegateCommand(ExecuteBatchImportCommand).ObservesCanExecute(() => BatchImportEnabled));
+        void ExecuteBatchImportCommand()
+        {
+            try
+            {
+                BatchImportEnabled = false;
+
+                // 打开文件选择对话框
+                var openFileDialog = new Microsoft.Win32.OpenFileDialog
+                {
+                    Title = "选择文本文件",
+                    Filter = "文本文件 (*.txt)|*.txt|所有文件 (*.*)|*.*",
+                    Multiselect = false
+                };
+
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    var fileContent = System.IO.File.ReadAllText(openFileDialog.FileName);
+
+                    // 解析文本,每行一个词条
+                    var lines = fileContent.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                                           .Where(line => !string.IsNullOrWhiteSpace(line))
+                                           .Select(line => line.Trim())
+                                           .ToList();
+
+                    if (lines.Count == 0)
+                    {
+                        MessageHelper.Warning("文件中没有有效的词条");
+                        return;
+                    }
+
+                    // 验证每个词条
+                    foreach (var line in lines)
+                    {
+                        WordsHelper.EnsureValidContent(line);
+                    }
+
+                    // 询问是否追加还是替换
+                    var result = MessageBox.Show(
+                        $"找到 {lines.Count} 条词句\n\n点击【是】追加到当前词库\n点击【否】替换当前词库\n点击【取消】取消导入",
+                        "批量导入",
+                        MessageBoxButton.YesNoCancel,
+                        MessageBoxImage.Question);
+
+                    if (result == MessageBoxResult.Cancel)
+                        return;
+
+                    if (result == MessageBoxResult.No)
+                    {
+                        // 替换模式：清空现有词条
+                        Words.Clear();
+                    }
+
+                    // 添加新词条
+                    foreach (var line in lines)
+                    {
+                        AddWord(line);
+                    }
+
+                    MessageHelper.Info($"成功导入 {lines.Count} 条词句");
+                }
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                e.Show(showDetail: false);
+            }
+            catch (Exception e)
+            {
+                e.Show();
+            }
+            BatchImportEnabled = true;
+        }
+        #endregion
 
         #endregion 命令
 
@@ -370,7 +497,12 @@ namespace ZuAnBot_Wpf.ViewModels
     {
         public static string GetLoacalWord(this WordsLibrary library, string categoryName)
         {
-            var words = library.Categories.First(x => x.CategoryName == categoryName);
+            var words = library.Categories.FirstOrDefault(x => x.CategoryName == categoryName);
+
+            if (words == null || words.Words.Count == 0)
+            {
+                throw new InvalidOperationException($"词库 \"{categoryName}\" 为空，请先添加词条");
+            }
 
             Random random = new Random((int)DateTime.Now.Ticks);
             var word = words.Words[random.Next(0, words.Words.Count)];

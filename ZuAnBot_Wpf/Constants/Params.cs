@@ -10,5 +10,6 @@ namespace ZuAnBot_Wpf.Constants
     {
         public static readonly string Library = nameof(Library);
         public static readonly string WordContent = nameof(WordContent);
+        public static readonly string Category = nameof(Category);
     }
 }

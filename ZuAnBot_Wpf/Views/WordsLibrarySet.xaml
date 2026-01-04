@@ -53,7 +53,7 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition/>
               </Grid.RowDefinitions>
-              <StackPanel 
+              <StackPanel
               Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Command="{Binding AddCommand}" Style="{DynamicResource toolBtn}" ToolTip="新增">
                   <Image Source="/Assets/images/添加.png"/>
@@ -64,6 +64,9 @@
                 <Button Command="{Binding EditCommand}" Style="{DynamicResource toolBtn}" ToolTip="编辑">
                   <Image Source="/Assets/images/编辑.png"/>
                 </Button>
+                <hc:Divider Orientation="Vertical" Margin="0,5,0,5"/>
+                <Button Command="{Binding BatchEditCommand}" Style="{DynamicResource toolBtn}" ToolTip="多行编辑" Content="多行编辑"/>
+                <Button Command="{Binding BatchImportCommand}" Style="{DynamicResource toolBtn}" ToolTip="批量导入" Content="批量导入"/>
                 <hc:Divider Orientation="Vertical" Margin="0,5,0,5"/>
                 <Button Command="{Binding CopyCommand}" Style="{DynamicResource toolBtn}" ToolTip="复制">
                   <Image Source="/Assets/images/复制.png"/>
