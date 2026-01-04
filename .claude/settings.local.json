@@ -7,7 +7,8 @@
       "Bash(dotnet list:*)",
       "Bash(dotnet add package:*)",
       "Bash(dotnet remove:*)",
-      "Bash(taskkill:*)"
+      "Bash(taskkill:*)",
+      "Bash(findstr:*)"
     ]
   }
 }

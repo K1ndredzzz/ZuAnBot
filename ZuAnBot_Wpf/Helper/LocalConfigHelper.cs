@@ -15,9 +15,9 @@ namespace ZuAnBot_Wpf.Helper
         private static readonly string wordsLibraryFile = "wordsLibrary.json";
 
         /// <summary>
-        /// 配置文件目录
+        /// 配置文件目录(便携版:存储在exe同目录下的Data文件夹)
         /// </summary>
-        public static string Dir => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ZuAnBot");
+        public static string Dir => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
 
         /// <summary>
         /// 词库文件路径
